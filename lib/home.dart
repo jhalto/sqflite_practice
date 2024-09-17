@@ -5,7 +5,8 @@ import 'package:sqflite_practice/db_helper.dart';
 import 'contact.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  // const Home({super.key});
+  Contact ?contact;
 
   @override
   State<Home> createState() => _HomeState();
@@ -18,7 +19,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text("Contact List"),centerTitle: true,),
       body: FutureBuilder(
-          future: DbHelper().readContact(), builder: (BuildContext context,AsyncSnapshot<List<Contact>> snapshot){
+          future: DbHelper.readContact(), builder: (BuildContext context,AsyncSnapshot<List<Contact>> snapshot){
            if(!snapshot.hasData){
              return Center(
                child: Column(
@@ -35,15 +36,25 @@ class _HomeState extends State<Home> {
            ):ListView(
              children: snapshot.data!.map((e) => Center(
                child: ListTile(
-                 title: Text(e.name),
+                 title: Text(e.name,style: TextStyle(color: Colors.black),),
                  subtitle: Text(e.phone),
-                 trailing: IconButton(onPressed: (){}, icon: Icon(Icons.delete)),
+                 trailing: IconButton(onPressed: ()async{
+                  await DbHelper.deleteContact(e.id!);
+                  setState(() {
+
+                  });
+                 }, icon: Icon(Icons.delete)),
                ),
              ),).toList(),
            );
       }),
       floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => AddContact(),));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => AddContact(
+
+        ),));
+        setState(() {
+
+        });
       },child: Icon(Icons.add),),
     );
   }
