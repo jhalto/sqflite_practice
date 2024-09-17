@@ -19,5 +19,22 @@ class DbHelper{
     return await db.insert('contact', contact.toMap() );
 
   }
-
+  Future<List<Contact>> readContact()async{
+    Database db = await DbHelper().initDb();
+    var contact = await db.query('contact');
+    List<Contact> contactList = contact.isNotEmpty ?
+        contact.map((e) => Contact.fromMap(e)).toList()
+        :[];
+    return contactList;
+  }
+   Future<int> updateContact(Contact contact)async{
+     Database db = await DbHelper().initDb();
+    return await db.update('contact', contact.toMap(),
+    where: 'id =?',whereArgs: [contact.id]);
+   }
+  Future<int> deleteContact(int id)async{
+    Database db = await DbHelper().initDb();
+    return await db.delete('contact',
+        where: 'id =?',whereArgs: [id]);
+  }
 }
