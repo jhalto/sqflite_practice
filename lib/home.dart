@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite_practice/add_contact.dart';
 import 'package:sqflite_practice/db_helper.dart';
+import 'package:sqflite_practice/update_contact.dart';
 
 import 'contact.dart';
 
@@ -38,23 +39,44 @@ class _HomeState extends State<Home> {
                child: ListTile(
                  title: Text(e.name,style: TextStyle(color: Colors.black),),
                  subtitle: Text(e.phone),
-                 trailing: IconButton(onPressed: ()async{
-                  await DbHelper.deleteContact(e.id!);
-                  setState(() {
+                 trailing: Container(
+                   width: 100,
+                   child: Row(
+                     children: [
+                       IconButton(onPressed: ()async{
 
-                  });
-                 }, icon: Icon(Icons.delete)),
+                        final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateContact(
+                           contact: e,
+
+                         ),));
+                        if(result==true){
+                          setState(() {
+
+                          });
+                        }
+                       }, icon: Icon(Icons.edit)),
+                       IconButton(onPressed: ()async{
+                        await DbHelper.deleteContact(e.id!);
+                        setState(() {
+
+                        });
+                       }, icon: Icon(Icons.delete)),
+                     ],
+                   ),
+                 ),
                ),
              ),).toList(),
            );
       }),
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => AddContact(
+      floatingActionButton: FloatingActionButton(onPressed: ()async{
+      final refresh = await Navigator.push(context, MaterialPageRoute(builder: (context) => AddContact(
 
         ),));
-        setState(() {
+        if(refresh == true){
+          setState(() {
 
-        });
+          });
+        }
       },child: Icon(Icons.add),),
     );
   }

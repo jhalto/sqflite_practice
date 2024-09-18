@@ -37,7 +37,7 @@ TextEditingController phoneController = TextEditingController();
 
              await DbHelper.createContact(
                  Contact(name: nameController.text, phone: phoneController.text));
-             Navigator.pop(context);
+             Navigator.pop(context,true);
             },child: Text("save"),)
           ],
         ),
